@@ -20,4 +20,8 @@ class MenuActivity : AppCompatActivity() {
     fun players(view: View) {
         startActivity(Intent(this, MainActivity::class.java))
     }
+
+    fun words(view: View) {
+        startActivity(Intent(this, WordsActivity::class.java))
+    }
 }

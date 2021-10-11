@@ -6,15 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteException
-import com.example.myvocabulary2.model.EmpModelClass
 import com.example.myvocabulary2.model.WordClass
 
 //creating the database logic, extending the SQLiteOpenHelper base class
-class DatabaseHandler(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,DATABASE_VERSION) {
+class DatabaseHandlerWords(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,null,DATABASE_VERSION) {
     companion object {
         private val DATABASE_VERSION = 1
-        private val DATABASE_NAME = "UsersDatabase"
-        private val TABLE_CONTACTS = "UsersTable"
+        private val DATABASE_NAME = "WordsDatabase"
         private val TABLE_WORDS = "WordsTable"
         private val KEY_ID = "id"
         private val KEY_NAME = "name"
@@ -22,37 +20,34 @@ class DatabaseHandler(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,
     override fun onCreate(db: SQLiteDatabase?) {
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         //creating table with fields
-        val CREATE_CONTACTS_TABLE = ("CREATE TABLE " + TABLE_CONTACTS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"  + KEY_NAME + " TEXT" + ")")
         val CREATE_WORDS_TABLE = ("CREATE TABLE " + TABLE_WORDS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"  + KEY_NAME + " TEXT" + ")")
-        db?.execSQL(CREATE_CONTACTS_TABLE)
         db?.execSQL(CREATE_WORDS_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         //  TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        db!!.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS)
+        db!!.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDS)
         onCreate(db)
     }
 
 
     //method to insert data
-    fun addEmployee(emp: EmpModelClass):Long{
+    fun addWord(emp: WordClass):Long{
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(KEY_ID, emp.userId)
-        contentValues.put(KEY_NAME, emp.userName) // EmpModelClass Name
+        contentValues.put(DatabaseHandlerWords.KEY_ID, emp.wordId)
+        contentValues.put(DatabaseHandlerWords.KEY_NAME, emp.word) // WordClass Name
         // Inserting Row
-        val success = db.insert(TABLE_CONTACTS, null, contentValues)
+        val success = db.insert(DatabaseHandlerWords.TABLE_WORDS, null, contentValues)
         //2nd argument is String containing nullColumnHack
         db.close() // Closing database connection
         return success
     }
     //method to read data
-    fun viewEmployee():List<EmpModelClass>{
-        val empList:ArrayList<EmpModelClass> = ArrayList<EmpModelClass>()
-        val selectQuery = "SELECT  * FROM $TABLE_CONTACTS"
+    fun viewWord():List<WordClass>{
+        val empList:ArrayList<WordClass> = ArrayList<WordClass>()
+        val selectQuery = "SELECT  * FROM ${DatabaseHandlerWords.TABLE_WORDS}"
         val db = this.readableDatabase
         var cursor: Cursor? = null
         try{
@@ -67,32 +62,32 @@ class DatabaseHandler(context: Context): SQLiteOpenHelper(context,DATABASE_NAME,
             do {
                 userId = cursor.getInt(cursor.getColumnIndex("id"))
                 userName = cursor.getString(cursor.getColumnIndex("name"))
-                val emp= EmpModelClass(userId = userId, userName = userName)
+                val emp= WordClass(wordId = userId, word = userName)
                 empList.add(emp)
             } while (cursor.moveToNext())
         }
         return empList
     }
     //method to update data
-    fun updateEmployee(emp: EmpModelClass):Int{
+    fun updateWord(emp: WordClass):Int{
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(KEY_ID, emp.userId)
-        contentValues.put(KEY_NAME, emp.userName) // EmpModelClass Name
+        contentValues.put(DatabaseHandlerWords.KEY_ID, emp.wordId)
+        contentValues.put(DatabaseHandlerWords.KEY_NAME, emp.word) // EmpModelClass Name
 
         // Updating Row
-        val success = db.update(TABLE_CONTACTS, contentValues,"id="+emp.userId,null)
+        val success = db.update(DatabaseHandlerWords.TABLE_WORDS, contentValues,"id="+emp.wordId,null)
         //2nd argument is String containing nullColumnHack
         db.close() // Closing database connection
         return success
     }
     //method to delete data
-    fun deleteEmployee(emp: EmpModelClass):Int{
+    fun deleteWord(emp: WordClass):Int{
         val db = this.writableDatabase
         val contentValues = ContentValues()
-        contentValues.put(KEY_ID, emp.userId) // EmpModelClass UserId
+        contentValues.put(DatabaseHandlerWords.KEY_ID, emp.wordId) // WordClass UserId
         // Deleting Row
-        val success = db.delete(TABLE_CONTACTS,"id="+emp.userId,null)
+        val success = db.delete(DatabaseHandlerWords.TABLE_WORDS,"id="+emp.wordId,null)
         //2nd argument is String containing nullColumnHack
         db.close() // Closing database connection
         return success
