@@ -1,8 +1,9 @@
 package com.example.myvocabulary2.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myvocabulary2.R
 import com.example.myvocabulary2.adapters.MyWordsAdapter
 import com.example.myvocabulary2.handlers.DatabaseHandler
@@ -13,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_play.*
 
 class PlayActivity : AppCompatActivity() {
     var usedWordsList: Array<String> = arrayOf<String>()
+    private val TAG = "MyActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
@@ -36,7 +38,11 @@ class PlayActivity : AppCompatActivity() {
             empArrayName[index] = e.userName
             index++
         }
-        val randomWords = words.asSequence().shuffled().take(index)
+        Log.v(TAG, "words= $words")
+        val filteredWords = words.filterNot { it.word in usedWords}
+        Log.v(TAG,"filteredWords: ${filteredWords}")
+        val randomWords = filteredWords.asSequence().shuffled().take(index)
+        Log.v(TAG,"randomWords: $randomWords")
         val word = Array<String>(emp.size){"0"}
         var ind = 0
         for(e in randomWords) {
@@ -51,6 +57,6 @@ class PlayActivity : AppCompatActivity() {
 
     fun nextRound(view: View) {
         // yangi sozlar
-        finish()
+        viewRecord()
     }
 }
