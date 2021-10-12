@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewRecord(View(this))
     }
     //method for saving records in database
     fun saveRecord(view: View){
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         }else{
             Toast.makeText(applicationContext,"id or name or email cannot be blank",Toast.LENGTH_LONG).show()
         }
-
+        viewRecord(View(this))
     }
     //method for read records from database in ListView
     fun viewRecord(view: View){
@@ -121,5 +122,6 @@ class MainActivity : AppCompatActivity() {
         })
         val b = dialogBuilder.create()
         b.show()
+        viewRecord(View(this))
     }
 }
