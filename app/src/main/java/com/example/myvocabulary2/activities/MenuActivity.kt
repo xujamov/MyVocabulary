@@ -25,4 +25,8 @@ class MenuActivity : Activity() {
     fun words(view: View) {
         startActivity(Intent(this, WordsActivity::class.java))
     }
+
+    fun playJson(view: View) {
+        startActivity(Intent(this, JsonExample::class.java))
+    }
 }
