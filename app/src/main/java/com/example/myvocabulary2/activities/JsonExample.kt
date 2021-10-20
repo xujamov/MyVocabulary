@@ -1,58 +1,54 @@
 package com.example.myvocabulary2.activities
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myvocabulary2.R
 import com.example.myvocabulary2.adapters.MainAdapter
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.synthetic.main.activity_json_example.*
 import okhttp3.*
 import java.io.IOException
 
-class JsonExample : AppCompatActivity() {
+class JsonExample : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_json_example)
 
         recyclerView_main.layoutManager = LinearLayoutManager(this)
-//        recyclerView_main.adapter = MainAdapter()
 
         fetchJson()
     }
 
     fun fetchJson() {
-        println("Attempting to Fetch JSON")
-        val url = "https://api.letsbuildthatapp.com/youtube/home_feed"
-
+        println("MyLog: Attempting to Fetch JSON")
+        val url = "http://10.0.2.2:9000/user"
         val request = Request.Builder().url(url).build()
-
         val client = OkHttpClient()
         client.newCall(request).enqueue(object: Callback {
             override fun onResponse(call: Call, response: Response) {
-                val body = response.body()?.string()
-                println(body)
+                val body = "{\"users\":" + response.body()?.string() + "}"
 
-                val gson = GsonBuilder().create()
-
-                val homeFeed = gson.fromJson(body, HomeFeed::class.java)
+                val gson = Gson()
+                val user = gson.fromJson(body, UserList::class.java)
 
                 runOnUiThread {
-//                    for(i in MainAdapter(homeFeed))
-                    recyclerView_main.adapter = MainAdapter(homeFeed)
+                    recyclerView_main.adapter = MainAdapter(user.users)
                 }
             }
 
             override fun onFailure(call: Call?, e: IOException) {
-                print("Failed to execute")
+                println("MyLog: Failed to execute")
             }
         })
     }
 }
 
-class HomeFeed(val videos: List<Video>)
-
-class Video(val id: Int, val name: String, val link: String,
-            val imageUrl: String, numberOfViews: Int, val channel: Channel)
-
-class Channel(val name: String, val profileImageUrl: String)
+class UserList(val users: List<User>)
+data class User(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String
+)

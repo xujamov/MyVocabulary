@@ -3,19 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".activities.JsonExample">
 
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
-        android:id="@+id/textView_video_title"
+        android:id="@+id/textView_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />

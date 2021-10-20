@@ -5,15 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myvocabulary2.R
-import com.example.myvocabulary2.activities.HomeFeed
+import com.example.myvocabulary2.activities.User
+import com.example.myvocabulary2.activities.UserList
 import kotlinx.android.synthetic.main.video_row.view.*
 
-class MainAdapter(val homeFeed: HomeFeed): RecyclerView.Adapter<CustomViewHolder>() {
+class MainAdapter(val list: List<User>): RecyclerView.Adapter<CustomViewHolder>() {
 //    val videoTitles = listOf("First title", "Second", "3rd", "MOOOORE Title")
 
     override fun getItemCount(): Int {
-        print("auuuuuuuuuuuuu ${homeFeed.videos.count()}")
-        return homeFeed.videos.count()
+        return list.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -23,9 +23,8 @@ class MainAdapter(val homeFeed: HomeFeed): RecyclerView.Adapter<CustomViewHolder
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val video = homeFeed.videos.get(position)
-        print("video ${position}")
-        holder?.view?.textView_video_title?.text = video.name
+        val person = list[position]
+        holder?.view?.textView_name?.text = person.name
     }
 }
 
